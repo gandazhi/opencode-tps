@@ -1,0 +1,28 @@
+{
+  "name": "@gandazhi/opencode-tps",
+  "version": "0.1.0",
+  "description": "opencode TUI plugin — show token generation speed (t/s) in the sidebar footer",
+  "type": "module",
+  "exports": {
+    "./tui": "./src/index.tsx"
+  },
+  "files": ["src"],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "peerDependencies": {
+    "solid-js": "*",
+    "@opentui/solid": "*",
+    "@opentui/core": "*"
+  },
+  "devDependencies": {
+    "@mimo-ai/plugin": "*",
+    "@mimo-ai/sdk": "*",
+    "solid-js": "*",
+    "@opentui/solid": "*",
+    "@opentui/core": "*",
+    "typescript": "*",
+    "@types/bun": "*"
+  }
+}
