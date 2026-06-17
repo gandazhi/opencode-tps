@@ -46,15 +46,24 @@ function View(props: { api: TuiPluginApi; session_id: string }) {
   })
 
   return (
-    <Show when={formatTPS(tps())}>{(label) => <text fg={theme().textMuted}>{label()}</text>}</Show>
+    <Show when={formatTPS(tps())}>
+      {(label) => (
+        <box>
+          <text fg={theme().text}>
+            <b>Speed</b>
+          </text>
+          <text fg={theme().textMuted}>{label()}</text>
+        </box>
+      )}
+    </Show>
   )
 }
 
 const tui: TuiPlugin = async (api) => {
   api.slots.register({
-    order: 100,
+    order: 9999,
     slots: {
-      sidebar_footer: (_ctx, props) => <View api={api} session_id={props.session_id} />,
+      sidebar_content: (_ctx, props) => <View api={api} session_id={props.session_id} />,
     },
   })
 }
