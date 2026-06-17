@@ -12,7 +12,10 @@
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
-    "types": ["bun-types"]
+    "types": ["bun-types"],
+    "paths": {
+      "@mimo-ai/sdk/v2": ["../MiMo-Code/packages/sdk/js/src/v2/gen/types.gen.ts"]
+    }
   },
   "include": ["src", "test"]
 }
