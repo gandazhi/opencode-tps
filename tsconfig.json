@@ -14,6 +14,11 @@
     "verbatimModuleSyntax": true,
     "types": ["bun-types"],
     "paths": {
+      // Workaround: published @mimo-ai/sdk@0.1.1 ships no dist (broken publish).
+      // This import is type-only (erased at runtime), so we resolve it to the
+      // MiMo-Code gen types file (pure, self-contained) for full-fidelity types.
+      // Requires MiMo-Code as a sibling dir; remove once @mimo-ai/sdk publishes a
+      // working build.
       "@mimo-ai/sdk/v2": ["../MiMo-Code/packages/sdk/js/src/v2/gen/types.gen.ts"]
     }
   },
