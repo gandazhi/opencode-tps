@@ -509,3 +509,13 @@ git commit -m "docs: add README and publish metadata"
 - **占位符扫描**：无 TBD/TODO，每个代码步都给了完整代码。
 - **类型一致性**：`streamingTPS`/`completedTPS`/`formatTPS` 在 Task 3 定义、Task 4 引用，签名一致；`AssistantMessage`、`TuiPluginApi`、`TuiPluginModule` 来自已发布的 `@mimo-ai/*` 类型包。
 - **与 spec 的偏差**：spec 原写 `bun build` → `dist/index.js`，本计划改为直接发布源码 `./src/index.tsx`（理由已写入 spec「为什么发布源码而非编译产物」并同步更新了 spec 的构建/安装/验证章节）。这是计划阶段发现的技术修正，spec 已同步更新，两者一致。
+
+## 实施记录（执行阶段发现，2026-06-17）
+
+实施过程中发现一处上游缺陷，已就地处理并记录：
+
+- **`@mimo-ai/sdk@0.1.1` 发布包损坏**：其 `package.json` 声明 `"files": ["dist"]` 且 `exports["./v2"]` 指向 `./dist/v2/index.d.ts`，但实际未发布 `dist/`（包内只有 LICENSE/README/package.json）。导致 `import type { AssistantMessage } from "@mimo-ai/sdk/v2"` 无法解析（typecheck TS2307）。`@mimo-ai/plugin@0.1.1` 正常（带了 dist），`@opentui/solid@0.4.1` 正常。
+- **处理方式**：在 `tsconfig.json` 加 `paths` 映射，把 `@mimo-ai/sdk/v2` 指向本地 MiMo-Code 的纯类型文件 `packages/sdk/js/src/v2/gen/types.gen.ts`（自包含、无 effect/zod 依赖）。该 import 是 `import type`（运行期擦除），对运行时零影响，且获得了比损坏包更高保真的类型。`tsconfig.json` 内有注释说明，等 `@mimo-ai/sdk` 发布可用构建后即可删除该映射。
+- **lockfile**：Bun 生成文本格式 `bun.lock`（非 `bun.lockb`），已加入 `.gitignore`。
+- **提交历史**：`3a7074e` 脚手架 → `d2738ec` 忽略 lockfile → `940cfca` 纯函数+测试 → `d258fba` UI 渲染+paths 修复 → `62a42ba` paths 注释。
+
